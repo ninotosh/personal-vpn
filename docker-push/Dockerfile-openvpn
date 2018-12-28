@@ -1,0 +1,8 @@
+FROM ubuntu:18.10
+
+RUN apt update && apt install -y openvpn=2.4.6-1ubuntu2 iptables=1.6.1-2ubuntu2
+
+VOLUME /mnt
+
+COPY entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["entrypoint.sh"]

@@ -1,0 +1,20 @@
+steps:
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['build', '-t', '${_DOCKER_USER}/openvpn', '-f', '${_DOCKERFILE}', '${_BUILD_CONTEXT}']
+- name: 'gcr.io/cloud-builders/docker'
+  # need a shell to resolve environment variables
+  entrypoint: 'sh'
+  args: ['-c', 'docker login --username ${_DOCKER_USER} --password $$DOCKER_PASSWORD']
+  secretEnv: ['DOCKER_PASSWORD']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ["push", "${_DOCKER_USER}/openvpn"]
+
+substitutions:
+  _DOCKERFILE: 'Dockerfile'
+  _BUILD_CONTEXT: '.'
+  _DOCKER_USER: ''
+
+secrets:
+- kmsKeyName: projects/${PROJECT_ID}/locations/global/keyRings/docker-hub-keyring/cryptoKeys/docker-hub-crypto-key
+  secretEnv:
+    DOCKER_PASSWORD: ${encrypted_docker_hub_password}
