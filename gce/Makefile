@@ -42,7 +42,7 @@ run:
 		--cap-add NET_ADMIN \
 		ninotoshi/openvpn \
 		--config /etc/openvpn/server.conf \
-    "
+	"
 
 .PHONY: docker-ps
 docker-ps:
