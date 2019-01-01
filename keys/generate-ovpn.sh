@@ -35,9 +35,9 @@ ${tls_auth}
 </tls-auth>
 ${conf}
 EOF
+
+    echo "${client_ovpn} has been created."
 }
 
 prepare_ovpn
 write_ovpn
-
-echo "${client_ovpn} has been created."
