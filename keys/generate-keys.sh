@@ -21,6 +21,51 @@ function make_tmp() {
     trap 'clean_tmp' EXIT SIGINT SIGQUIT SIGTERM
 }
 
+function _create_pkis() {
+    docker run -t --rm \
+        -v ${tmp_pki_dir}:/mnt \
+        -v ${self_dir}/run-easyrsa.sh:/opt/run-easyrsa.sh \
+        --entrypoint /opt/run-easyrsa.sh \
+        ubuntu:18.10
+}
+
+function _reset_server_pki() {
+    rm -fr ${server_pki_dir}
+    mkdir -p ${server_pki_dir}
+}
+
+function _copy_server_pki() {
+    _reset_server_pki
+
+    cp \
+        ${tmp_pki_dir}/pki/ca.crt \
+        ${tmp_pki_dir}/pki/dh.pem \
+        ${tmp_pki_dir}/pki/issued/myserver.crt \
+        ${tmp_pki_dir}/pki/private/myserver.key \
+        ${server_pki_dir}
+}
+
+function _reset_client_pki() {
+    rm -fr ${client_pki_dir}
+    mkdir -p ${client_pki_dir}
+}
+
+function _copy_client_pki() {
+    _reset_client_pki
+
+    cp \
+        ${tmp_pki_dir}/pki/ca.crt \
+        ${tmp_pki_dir}/pki/issued/client1.crt \
+        ${tmp_pki_dir}/pki/private/client1.key \
+        ${client_pki_dir}
+}
+
+function create_copy_pkis() {
+    _create_pkis
+    _copy_server_pki
+    _copy_client_pki
+}
+
 function _build_openvpn() {
     cd ${build_dir}
     make build
@@ -39,61 +84,16 @@ function _create_psk() {
         --genkey --secret /mnt/ta.key
 }
 
-function _set_psk() {
+function _copy_psk() {
     cp ${tmp_pki_dir}/ta.key ${server_pki_dir}
     cp ${tmp_pki_dir}/ta.key ${client_pki_dir}
 }
 
-function create_set_psk() {
+function create_copy_psk() {
     _create_psk
-    _set_psk
-}
-
-function _create_pkis() {
-    docker run -t --rm \
-        -v ${tmp_pki_dir}:/mnt \
-        -v ${self_dir}/run-easyrsa.sh:/opt/run-easyrsa.sh \
-        --entrypoint /opt/run-easyrsa.sh \
-        ubuntu:18.10
-}
-
-function _reset_server_pki() {
-    rm -fr ${server_pki_dir}
-    mkdir -p ${server_pki_dir}
-}
-
-function _set_server_pki() {
-    _reset_server_pki
-
-    cp \
-        ${tmp_pki_dir}/pki/ca.crt \
-        ${tmp_pki_dir}/pki/dh.pem \
-        ${tmp_pki_dir}/pki/issued/myserver.crt \
-        ${tmp_pki_dir}/pki/private/myserver.key \
-        ${server_pki_dir}
-}
-
-function _reset_client_pki() {
-    rm -fr ${client_pki_dir}
-    mkdir -p ${client_pki_dir}
-}
-
-function _set_client_pki() {
-    _reset_client_pki
-
-    cp \
-        ${tmp_pki_dir}/pki/ca.crt \
-        ${tmp_pki_dir}/pki/issued/client1.crt \
-        ${tmp_pki_dir}/pki/private/client1.key \
-        ${client_pki_dir}
-}
-
-function create_set_pkis() {
-    _create_pkis
-    _set_server_pki
-    _set_client_pki
+    _copy_psk
 }
 
 make_tmp
-#create_set_pkis
-#create_set_psk
+create_copy_pkis
+create_copy_psk
