@@ -1,5 +1,18 @@
 #!/bin/sh -eu
 
+client_count=5
+while getopts n: OPT; do
+    case ${OPT} in
+    n)
+        client_count=$OPTARG
+        ;;
+    *)
+        echo "usage: $0 [-n client_count]" > /dev/stderr
+        exit 1
+        ;;
+    esac
+done
+
 self_dir=`dirname $0`
 self_dir=`cd ${self_dir}; pwd`
 
@@ -26,7 +39,7 @@ function _create_pkis() {
         -v ${tmp_pki_dir}:/mnt \
         -v ${self_dir}/run-easyrsa.sh:/opt/run-easyrsa.sh \
         --entrypoint /opt/run-easyrsa.sh \
-        ubuntu:18.10
+        ubuntu:18.10 ${client_count}
 }
 
 function _reset_server_pki() {
@@ -55,8 +68,8 @@ function _copy_client_pki() {
 
     cp \
         ${tmp_pki_dir}/pki/ca.crt \
-        ${tmp_pki_dir}/pki/issued/client1.crt \
-        ${tmp_pki_dir}/pki/private/client1.key \
+        ${tmp_pki_dir}/pki/issued/client*.crt \
+        ${tmp_pki_dir}/pki/private/client*.key \
         ${client_pki_dir}
 }
 

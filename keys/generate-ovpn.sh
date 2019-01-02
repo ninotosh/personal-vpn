@@ -5,22 +5,24 @@ remote=${1:?"Run $0 server_to_connect_to"}
 self_dir=`dirname $0`
 self_dir=`cd ${self_dir}; pwd`
 client_pki_dir="${self_dir}/client/pki"
+ovpn_dir="${self_dir}/client/ovpn"
 client_template_conf="${self_dir}/../conf/client-template.conf"
-client_ovpn="${client_pki_dir}/client1.ovpn"
 
-function prepare_ovpn() {
-    touch ${client_ovpn}
-    chmod 600 ${client_ovpn}
+function prepare_ovpn_dir() {
+    mkdir -p ${ovpn_dir}
+    chmod 700 ${ovpn_dir}
 }
 
-function write_ovpn() {
+function _write_ovpn() {
+    client=$1
     ca=`cat ${client_pki_dir}/ca.crt`
-    cert=`cat ${client_pki_dir}/client1.crt`
-    key=`cat ${client_pki_dir}/client1.key`
+    cert=`cat ${client_pki_dir}/${client}.crt`
+    key=`cat ${client_pki_dir}/${client}.key`
     tls_auth=`cat ${client_pki_dir}/ta.key`
     conf=`cat ${client_template_conf}`
+    ovpn=${ovpn_dir}/${client}.ovpn
 
-    cat << EOF | sed "s/\${remote}/${remote}/g" > ${client_ovpn}
+    cat << EOF | sed "s/\${remote}/${remote}/g" > ${ovpn}
 <ca>
 ${ca}
 </ca>
@@ -36,8 +38,22 @@ ${tls_auth}
 ${conf}
 EOF
 
-    echo "${client_ovpn} has been created."
+    echo "${ovpn} has been created."
 }
 
-prepare_ovpn
-write_ovpn
+function write_all_ovpn() {
+    for crt in ${client_pki_dir}/client*.crt; do
+        client=`basename ${crt%.*}`
+        if [ -f ${client_pki_dir}/${client}.key ]; then
+            _write_ovpn ${client}
+        fi
+    done
+}
+
+function remove_client_pki_dir() {
+    rm -r ${client_pki_dir}
+}
+
+prepare_ovpn_dir
+write_all_ovpn
+remove_client_pki_dir
