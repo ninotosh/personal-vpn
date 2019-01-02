@@ -76,7 +76,7 @@ make kubectl-show-server-ip
 
 ```bash
 cd ${project_dir}/client
-./run-client.sh ../keys/client/pki/client0.ovpn
+./run-client.sh ../keys/client/ovpn/client0.ovpn
 ```
 
 ##### notes
