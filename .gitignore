@@ -1,2 +1,4 @@
 pki
 tmp
+*.key
+*.ovpn
