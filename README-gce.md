@@ -69,7 +69,7 @@ make SERVER="${external_ip_address}" generate-ovpn
 
 ```bash
 cd ${project_dir}/client
-./run-client.sh ../keys/client/pki/client0.ovpn
+./run-client.sh ../keys/client/ovpn/client0.ovpn
 ```
 
 ##### delete the instance
@@ -88,5 +88,5 @@ make delete
 1. `cd ${project_dir}/gce && make docker-restart`
 This command will not return when you are on the VPN
 because the VPN connection will be lost.
-1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/pki/client0.ovpn`
+1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
 1. `cd ${project_dir}/gce && make docker-ps`
