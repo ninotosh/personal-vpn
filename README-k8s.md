@@ -1,7 +1,13 @@
+##### set an environment variable for the project directory
+
+```bash
+project_dir="`pwd`"
+```
+
 ##### build and push a server image
 
 ```bash
-cd docker-push
+cd ${project_dir}/docker-push
 make all
 ```
 
@@ -31,7 +37,7 @@ gcloud beta compute addresses list \
 Generate a manifest file.
 
 ```bash
-cd k8s
+cd ${project_dir}/k8s
 cat openvpn-template.yaml \
 | sed "s/\${loadBalancerIP}/${loadBalancerIP}/g" \
 > openvpn.yaml
@@ -45,15 +51,18 @@ make up
 
 ##### generate certificates and keys
 
+Change the number of clients as needed.
+No more client files can be additionally created later.
+
 ```bash
-cd keys
-make generate-keys
+cd ${project_dir}/keys
+make generate-keys -n 5
 ```
 
 ##### generate ovpn file for clients
 
 ```bash
-cd keys
+cd ${project_dir}/keys
 make SERVER="the.static.IP.address" generate-ovpn
 ```
 
@@ -66,8 +75,8 @@ make kubectl-show-server-ip
 ##### run a client
 
 ```bash
-cd client
-./run-client.sh ../keys/client/pki/client1.ovpn
+cd ${project_dir}/client
+./run-client.sh ../keys/client/pki/client0.ovpn
 ```
 
 ##### notes
