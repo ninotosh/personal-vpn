@@ -31,3 +31,8 @@ delete-service:
 .PHONY: get-pod
 get-pod:
 	-kubectl get pod
+
+.PHONY: show-server-ip
+show-server-ip:
+	kubectl get service openvpn-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+	@echo
