@@ -13,58 +13,38 @@ while getopts n: OPT; do
     esac
 done
 
-self_dir=`dirname $0`
-self_dir=`cd ${self_dir}; pwd`
+source ./vars.sh
 
-tmp_dir="`mktemp -d ${self_dir}/tmp_XXXXXXXX`"
-trap "rm -fr ${tmp_dir}" EXIT SIGINT SIGQUIT SIGTERM
-
-server_pki_dir="${self_dir}/server/pki"
-client_pki_dir="${self_dir}/client/pki"
+pki_dir="`mktemp -d ${tmp_dir}/XXXXXXXX`"
+trap "rm -fr ${pki_dir}" EXIT SIGINT SIGQUIT SIGTERM
 
 function create_pkis() {
     docker run -t --rm \
-        -v ${tmp_dir}:/mnt \
+        -v ${pki_dir}:/mnt \
         -v ${self_dir}/run-easyrsa.sh:/opt/run-easyrsa.sh \
         --entrypoint /opt/run-easyrsa.sh \
         ubuntu:18.10 ${client_count}
 }
 
-function _reset_server_pki() {
-    rm -fr ${server_pki_dir}
-    mkdir -p ${server_pki_dir}
-    chmod 700 ${server_pki_dir}
-}
-
 function copy_server_pki() {
-    _reset_server_pki
-
     cp \
-        ${tmp_dir}/pki/ca.crt \
-        ${tmp_dir}/pki/dh.pem \
-        ${tmp_dir}/pki/issued/myserver.crt \
-        ${tmp_dir}/pki/private/myserver.key \
-        ${server_pki_dir}
+        ${pki_dir}/pki/ca.crt \
+        ${pki_dir}/pki/issued/myserver.crt \
+        ${pki_dir}/pki/private/myserver.key \
+        ${pki_dir}/pki/dh.pem \
+        ${server_dir}
 
-    echo "server PKI has been created in ${server_pki_dir}"
-}
-
-function _reset_client_pki() {
-    rm -fr ${client_pki_dir}
-    mkdir -p ${client_pki_dir}
-    chmod 700 ${client_pki_dir}
+    echo "server PKI has been created in ${server_dir}"
 }
 
 function copy_client_pki() {
-    _reset_client_pki
-
     cp \
-        ${tmp_dir}/pki/ca.crt \
-        ${tmp_dir}/pki/issued/client*.crt \
-        ${tmp_dir}/pki/private/client*.key \
-        ${client_pki_dir}
+        ${pki_dir}/pki/ca.crt \
+        ${pki_dir}/pki/issued/client*.crt \
+        ${pki_dir}/pki/private/client*.key \
+        ${client_dir}
 
-    echo "client PKI has been created in ${client_pki_dir}"
+    echo "client PKI has been created in ${client_dir}"
 }
 
 create_pkis

@@ -76,7 +76,7 @@ make SERVER="${external_ip_address}" generate-ovpn
 Move ovpn files.
 
 ```bash
-mv client/ovpn/client*.ovpn /path/to/secure/directory
+mv tmp/ovpn/client*.ovpn /path/to/secure/directory
 ```
 
 ##### run a client
@@ -90,10 +90,8 @@ cd ${project_dir}/client
 
 ```bash
 cd ${project_dir}/keys
-make clean_all
+make clean
 ```
-
-`clean_all` is the same as `clean_client` and `clean_server`.
 
 ----
 
