@@ -1,7 +1,7 @@
 CLIENTS=5
-.PHONY: generate-keys
-generate-keys:
-	./generate-keys.sh -n ${CLIENTS}
+.PHONY: generate-pkis
+generate-pkis:
+	./generate-pkis.sh -n ${CLIENTS}
 
 IMAGE=
 .PHONY: generate-tls-auth-key
