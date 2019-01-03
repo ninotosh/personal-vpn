@@ -54,7 +54,7 @@ make upload
 
 ```bash
 cd ${project_dir}/gce
-make IMAGE=${docker_hub_image} run
+make IMAGE=${docker_hub_image} docker-run
 ```
 
 ##### generate configuration files for clients
