@@ -1,14 +1,17 @@
-##### set an environment variable for the project directory
+##### set environment variables for the project
 
 ```bash
 project_dir="`pwd`"
+docker_hub_image="..."
 ```
+
+`docker_hub_image` is your Dokcer Hub image name such as `username/openvpn`.
 
 ##### build and push a server image
 
 ```bash
 cd ${project_dir}/docker-push
-make all
+make IMAGE=${docker_hub_image} all
 ```
 
 ##### create a cluster
@@ -40,6 +43,7 @@ Generate a manifest file.
 cd ${project_dir}/k8s
 cat openvpn-template.yaml \
 | sed "s/\${loadBalancerIP}/${loadBalancerIP}/g" \
+| sed "s/\${image}/${docker_hub_image}/g" \
 > openvpn.yaml
 ```
 
@@ -59,6 +63,11 @@ cd ${project_dir}/keys
 make CLIENTS=5 generate-keys
 ```
 
+Generate a TLS auth key to mitigate DoS attack.
+```bash
+make IMAGE=${docker_hub_image} generate-tls-auth-key
+```
+
 ##### generate ovpn files for clients
 
 ```bash
@@ -69,7 +78,8 @@ make SERVER="the.static.IP.address" generate-ovpn
 The active static IP address can be shown with
 
 ```bash
-make kubectl-show-server-ip
+cd ${project_dir}/k8s
+make show-server-ip
 ```
 
 Move ovpn files.

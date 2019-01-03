@@ -1,5 +1,7 @@
 #!/bin/sh -eu
 
+image=${1:?"usage: $0 image_to_run"}
+
 self_dir=`dirname $0`
 self_dir=`cd ${self_dir}; pwd`
 host_pki_dir="${self_dir}/../keys/server/pki"
@@ -17,5 +19,5 @@ docker run -it --rm \
     -p 0.0.0.0:443:443/tcp \
     --device /dev/net/tun \
     --cap-add NET_ADMIN \
-    ninotoshi/openvpn \
+    ${image} \
     --config /etc/openvpn/server.conf
