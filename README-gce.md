@@ -1,14 +1,17 @@
-##### set an environment variable for the project directory
+##### set environment variables for the project
 
 ```bash
 project_dir="`pwd`"
+docker_hub_image="..."
 ```
+
+`docker_hub_image` is your Dokcer Hub image name such as `username/openvpn`.
 
 ##### build and push a server image
 
 ```bash
 cd ${project_dir}/docker-push
-make all
+make IMAGE=${docker_hub_image} all
 ```
 
 ##### generate certificates and keys
@@ -19,6 +22,11 @@ No more client files can be additionally created later.
 ```bash
 cd ${project_dir}/keys
 make CLIENTS=5 generate-keys
+```
+
+Generate a TLS auth key to mitigate DoS attack.
+```bash
+make IMAGE=${docker_hub_image} generate-tls-auth-key
 ```
 
 ##### initialize `gcloud` configuration
@@ -32,7 +40,7 @@ make init
 
 ```bash
 cd ${project_dir}/gce
-make create
+make IMAGE=${docker_hub_image} create
 ```
 
 ##### upload a server configuration file and a PKI directory
@@ -46,7 +54,7 @@ make upload
 
 ```bash
 cd ${project_dir}/gce
-make run
+make IMAGE=${docker_hub_image} run
 ```
 
 ##### generate configuration files for clients
@@ -91,9 +99,9 @@ make clean_all
 
 ##### steps to update the container without recreating a GCE instance
 
-1. `cd ${project_dir}/docker-push && make all`
+1. `cd ${project_dir}/docker-push && make IMAGE=${docker_hub_image} all`
 1. `cd ${project_dir}/gce && make upload`
-1. `cd ${project_dir}/gce && make docker-restart`
+1. `cd ${project_dir}/gce && make IMAGE=${docker_hub_image} docker-restart`
 This command will not return when you are on the VPN
 because the VPN connection will be lost.
 1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`

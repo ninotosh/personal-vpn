@@ -1,10 +1,15 @@
+IMAGE=
+
 .PHONY: all
 all: build login push
 
 .PHONY: build
 build:
+ifeq (${IMAGE},)
+	$(error specify IMAGE)
+endif
 	docker image build \
-		-t ninotoshi/openvpn \
+		-t ${IMAGE} \
 		-f Dockerfile-openvpn .
 
 .PHONY: login
@@ -13,4 +18,7 @@ login:
 
 .PHONY: push
 push:
-	docker image push ninotoshi/openvpn
+ifeq (${IMAGE},)
+	$(error specify IMAGE)
+endif
+	docker image push ${IMAGE}

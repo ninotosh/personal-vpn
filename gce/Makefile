@@ -3,15 +3,19 @@ init:
 	gcloud init
 
 INSTANCE=openvpn-instance
+IMAGE=
 
 .PHONY: create
 create:
+ifeq (${IMAGE},)
+	$(error specify IMAGE)
+endif
 	gcloud compute instances \
 		create-with-container ${INSTANCE} \
 		--machine-type=f1-micro \
 		--can-ip-forward \
 		--tags=https-server \
-		--container-image=ninotoshi/openvpn \
+		--container-image=${IMAGE} \
 		--container-arg="--version" \
 		--container-privileged \
 		--container-restart-policy=never
@@ -33,6 +37,9 @@ upload:
 
 .PHONY: run
 run:
+ifeq (${IMAGE},)
+	$(error specify IMAGE)
+endif
 	gcloud compute ssh ${INSTANCE} --command="docker run -d --rm \
 		--name openvpn_server \
 		-v ${host_conf_file}:/etc/openvpn/server.conf \
@@ -40,7 +47,7 @@ run:
 		-p 0.0.0.0:443:443/tcp \
 		--device /dev/net/tun \
 		--cap-add NET_ADMIN \
-		ninotoshi/openvpn \
+		${IMAGE} \
 		--config /etc/openvpn/server.conf \
 	"
 
@@ -51,8 +58,11 @@ docker-ps:
 
 .PHONY: docker-restart
 docker-restart:
+ifeq (${IMAGE},)
+	$(error specify IMAGE)
+endif
 	gcloud compute ssh ${INSTANCE} \
-		--command="docker image pull ninotoshi/openvpn"
+		--command="docker image pull ${IMAGE}"
 	gcloud compute ssh ${INSTANCE} \
 		--command="docker restart openvpn_server"
 

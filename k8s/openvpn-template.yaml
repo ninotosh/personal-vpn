@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: openvpn-container
-        image: ninotoshi/openvpn
+        image: ${image}
         imagePullPolicy: Always
         args: ["--config", "/etc/openvpn/server.conf"]
         volumeMounts:
