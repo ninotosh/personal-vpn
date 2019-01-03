@@ -18,7 +18,7 @@ No more client files can be additionally created later.
 
 ```bash
 cd ${project_dir}/keys
-make generate-keys -n 5
+make CLIENTS=5 generate-keys
 ```
 
 ##### initialize `gcloud` configuration
@@ -49,7 +49,7 @@ cd ${project_dir}/gce
 make run
 ```
 
-##### generate a configuration file for clients
+##### generate configuration files for clients
 
 Get the external IP address of the GCE instance.
 ```bash
@@ -58,26 +58,34 @@ external_ip_address=`make show-ip`
 echo ${external_ip_address}
 ```
 
-Generate an ovpn file for clients.
+Generate ovpn files for clients.
 
 ```bash
 cd ${project_dir}/keys
 make SERVER="${external_ip_address}" generate-ovpn
 ```
 
+Move ovpn files.
+
+```bash
+mv client/ovpn/client*.ovpn /path/to/secure/directory
+```
+
 ##### run a client
 
 ```bash
 cd ${project_dir}/client
-./run-client.sh ../keys/client/ovpn/client0.ovpn
+./run-client.sh /path/to/secure/directory/client0.ovpn
 ```
 
-##### delete the instance
+##### clean key directories
 
 ```bash
-cd ${project_dir}/gce
-make delete
+cd ${project_dir}/keys
+make clean_all
 ```
+
+`clean_all` is the same as `clean_client` and `clean_server`.
 
 ----
 
