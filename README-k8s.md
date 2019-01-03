@@ -56,10 +56,10 @@ No more client files can be additionally created later.
 
 ```bash
 cd ${project_dir}/keys
-make generate-keys -n 5
+make CLIENTS=5 generate-keys
 ```
 
-##### generate ovpn file for clients
+##### generate ovpn files for clients
 
 ```bash
 cd ${project_dir}/keys
@@ -72,12 +72,28 @@ The active static IP address can be shown with
 make kubectl-show-server-ip
 ```
 
+Move ovpn files.
+
+```bash
+cd ${project_dir}/keys
+mv client/ovpn/client*.ovpn /path/to/secure/directory
+```
+
 ##### run a client
 
 ```bash
 cd ${project_dir}/client
-./run-client.sh ../keys/client/ovpn/client0.ovpn
+./run-client.sh /path/to/secure/directory/client0.ovpn
 ```
+
+##### clean key directories
+
+```bash
+cd ${project_dir}/keys
+make clean_all
+```
+
+`clean_all` is the same as `clean_client` and `clean_server`.
 
 ##### notes
 ###### switching TCP and UDP
