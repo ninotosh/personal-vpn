@@ -13,6 +13,3 @@ and the OpenVPN server by establishing a tunnel.
 - easy-rsa 3.0.4-2
 - OpenVPN 2.4.6-1ubuntu2
 - iptables 1.6.1-2ubuntu2
-
-TODO
-- [ ] stop hard coding the Docker Hub image
