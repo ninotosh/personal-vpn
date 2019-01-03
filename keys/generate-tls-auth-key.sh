@@ -2,16 +2,12 @@
 
 image=${1:?"usage: $0 openvpn_image"}
 
-self_dir=`dirname $0`
-self_dir=`cd ${self_dir}; pwd`
+source ./vars.sh
 
 build_dir="`cd ${self_dir}/..; pwd`/docker-push"
 
-tmp_dir="`mktemp -d ${self_dir}/tmp_XXXXXXXX`"
-trap "rm -fr ${tmp_dir}" EXIT SIGINT SIGQUIT SIGTERM
-
-server_pki_dir="${self_dir}/server/pki"
-client_pki_dir="${self_dir}/client/pki"
+ta_dir="`mktemp -d ${tmp_dir}/XXXXXXXX`"
+trap "rm -fr ${ta_dir}" EXIT SIGINT SIGQUIT SIGTERM
 
 function _build_openvpn() {
     cd ${build_dir}
@@ -25,7 +21,7 @@ function create_psk() {
     _build_openvpn
 
     docker run -t --rm \
-        -v ${tmp_dir}:/mnt \
+        -v ${ta_dir}:/mnt \
         --cap-add NET_ADMIN \
         ${image} \
         --genkey --secret /mnt/ta.key
@@ -44,8 +40,8 @@ function _copy_psk() {
 }
 
 function copy_psk() {
-    _copy_psk ${tmp_dir}/ta.key ${server_pki_dir}
-    _copy_psk ${tmp_dir}/ta.key ${client_pki_dir}
+    _copy_psk ${ta_dir}/ta.key ${server_dir}
+    _copy_psk ${ta_dir}/ta.key ${client_dir}
 }
 
 create_psk

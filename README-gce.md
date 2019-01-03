@@ -21,7 +21,7 @@ No more client files can be additionally created later.
 
 ```bash
 cd ${project_dir}/keys
-make CLIENTS=5 generate-keys
+make CLIENTS=5 generate-pkis
 ```
 
 Generate a TLS auth key to mitigate DoS attack.
@@ -54,7 +54,7 @@ make upload
 
 ```bash
 cd ${project_dir}/gce
-make IMAGE=${docker_hub_image} run
+make IMAGE=${docker_hub_image} docker-run
 ```
 
 ##### generate configuration files for clients
@@ -76,7 +76,7 @@ make SERVER="${external_ip_address}" generate-ovpn
 Move ovpn files.
 
 ```bash
-mv client/ovpn/client*.ovpn /path/to/secure/directory
+mv tmp/ovpn/client*.ovpn /path/to/secure/directory
 ```
 
 ##### run a client
@@ -90,10 +90,8 @@ cd ${project_dir}/client
 
 ```bash
 cd ${project_dir}/keys
-make clean_all
+make clean
 ```
-
-`clean_all` is the same as `clean_client` and `clean_server`.
 
 ----
 

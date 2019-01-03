@@ -35,8 +35,8 @@ upload:
 	gcloud compute scp \
 		--recurse ../keys/server/pki/. ${INSTANCE}:${host_pki_dir}
 
-.PHONY: run
-run:
+.PHONY: docker-run
+docker-run:
 ifeq (${IMAGE},)
 	$(error specify IMAGE)
 endif
