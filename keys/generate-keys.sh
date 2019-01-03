@@ -31,6 +31,7 @@ function clean_tmp() {
 
 function make_tmp() {
     mkdir -p ${tmp_pki_dir}
+    chmod 700 ${tmp_pki_dir}
     trap 'clean_tmp' EXIT SIGINT SIGQUIT SIGTERM
 }
 
@@ -45,6 +46,7 @@ function _create_pkis() {
 function _reset_server_pki() {
     rm -fr ${server_pki_dir}
     mkdir -p ${server_pki_dir}
+    chmod 700 ${server_pki_dir}
 }
 
 function _copy_server_pki() {
@@ -61,6 +63,7 @@ function _copy_server_pki() {
 function _reset_client_pki() {
     rm -fr ${client_pki_dir}
     mkdir -p ${client_pki_dir}
+    chmod 700 ${client_pki_dir}
 }
 
 function _copy_client_pki() {

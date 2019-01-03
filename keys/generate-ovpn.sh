@@ -38,6 +38,7 @@ ${tls_auth}
 ${conf}
 EOF
 
+    chmod 600 ${ovpn}
     echo "${ovpn} has been created."
 }
 
