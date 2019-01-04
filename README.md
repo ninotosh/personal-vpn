@@ -1,3 +1,5 @@
+![docker pulls](https://img.shields.io/docker/pulls/ninotoshi/openvpn.svg)
+
 #### Personal OpenVPN server
 
 This is a repository to set up a personal OpenVPN server
