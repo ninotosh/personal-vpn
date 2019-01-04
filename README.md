@@ -1,4 +1,4 @@
-![docker pulls](https://img.shields.io/docker/pulls/ninotoshi/openvpn.svg)
+[![docker pulls](https://img.shields.io/docker/pulls/ninotoshi/openvpn.svg)](https://hub.docker.com/r/ninotoshi/openvpn)
 
 #### Personal OpenVPN server
 
