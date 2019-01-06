@@ -47,7 +47,7 @@ make IMAGE=${docker_hub_image} create
 
 ```bash
 cd ${project_dir}/gce
-make upload
+make upload_all
 ```
 
 ##### run a server container on the GCE instance
@@ -98,7 +98,7 @@ make clean
 ##### steps to update the container without recreating a GCE instance
 
 1. `cd ${project_dir}/docker-push && make IMAGE=${docker_hub_image} all`
-1. `cd ${project_dir}/gce && make upload`
+1. `cd ${project_dir}/gce && make upload_all` (or `upload_conf` only for the configuration)
 1. `cd ${project_dir}/gce && make IMAGE=${docker_hub_image} docker-restart`
 This command will not return when you are on the VPN
 because the VPN connection will be lost.
