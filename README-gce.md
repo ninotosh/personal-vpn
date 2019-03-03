@@ -98,9 +98,20 @@ make clean
 ##### steps to update the container without recreating a GCE instance
 
 1. `cd ${project_dir}/docker-push && make IMAGE=${docker_hub_image} all`
-1. `cd ${project_dir}/gce && make upload_all` (or `upload_conf` only for the configuration)
-1. `cd ${project_dir}/gce && make IMAGE=${docker_hub_image} docker-restart`
-This command will not return when you are on the VPN
+1. `cd ${project_dir}/gce && make init`
+1. `cd ${project_dir}/gce && make upload_all`
+1. `cd ${project_dir}/gce && make IMAGE=${docker_hub_image} docker-pull-restart`
+1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
+1. `cd ${project_dir}/gce && make docker-ps`
+
+note: `make docker-pull-restart` may not return a command prompt
+when you are on the VPN
 because the VPN connection will be lost.
+
+##### steps to update the server configuration
+
+1. `cd ${project_dir}/gce && make init`
+1. `cd ${project_dir}/gce && make upload_conf`
+1. `cd ${project_dir}/gce && make docker-restart`
 1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
 1. `cd ${project_dir}/gce && make docker-ps`

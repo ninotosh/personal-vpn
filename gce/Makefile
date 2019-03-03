@@ -62,13 +62,19 @@ docker-ps:
 	gcloud compute ssh ${INSTANCE} \
 		--command="docker ps"
 
-.PHONY: docker-restart
-docker-restart:
+.PHONY: docker-pull-restart
+docker-pull-restart: docker-pull docker-restart
+
+.PHONY: docker-pull
+docker-pull:
 ifeq (${IMAGE},)
 	$(error specify IMAGE)
 endif
 	gcloud compute ssh ${INSTANCE} \
 		--command="docker image pull ${IMAGE}"
+
+.PHONY: docker-restart
+docker-restart:
 	gcloud compute ssh ${INSTANCE} \
 		--command="docker restart openvpn_server"
 
