@@ -62,6 +62,16 @@ docker-ps:
 	gcloud compute ssh ${INSTANCE} \
 		--command="docker ps"
 
+.PHONY: docker-logs
+docker-logs:
+	gcloud compute ssh ${INSTANCE} \
+		--command="docker logs openvpn_server"
+
+.PHONY: docker-tail
+docker-tail:
+	gcloud compute ssh ${INSTANCE} \
+		--command="docker logs -f openvpn_server"
+
 .PHONY: docker-pull-restart
 docker-pull-restart: docker-pull docker-restart
 

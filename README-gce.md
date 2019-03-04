@@ -101,8 +101,8 @@ make clean
 1. `cd ${project_dir}/gce && make init`
 1. `cd ${project_dir}/gce && make upload_all`
 1. `cd ${project_dir}/gce && make IMAGE=${docker_hub_image} docker-pull-restart`
-1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
 1. `cd ${project_dir}/gce && make docker-ps`
+1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
 
 note: `make docker-pull-restart` may not return a command prompt
 when you are on the VPN
@@ -113,5 +113,5 @@ because the VPN connection will be lost.
 1. `cd ${project_dir}/gce && make init`
 1. `cd ${project_dir}/gce && make upload_conf`
 1. `cd ${project_dir}/gce && make docker-restart`
-1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
 1. `cd ${project_dir}/gce && make docker-ps`
+1. `cd ${project_dir}/client && ./run-client.sh ../keys/client/ovpn/client0.ovpn`
