@@ -36,7 +36,7 @@ upload_conf:
 .PHONY: upload_pki
 upload_pki:
 	gcloud compute scp \
-		--recurse ../keys/tmp/server/pki/. ${INSTANCE}:${host_pki_dir}
+		--recurse ../keys/tmp/server/. ${INSTANCE}:${host_pki_dir}
 
 .PHONY: upload_all
 upload_all: upload_conf upload_pki
