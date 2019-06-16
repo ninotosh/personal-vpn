@@ -96,8 +96,9 @@ make clean
 
 ----
 
-#### steps to update the container without recreating a GCE instance
+#### steps to update the image without recreating a GCE instance
 
+1. edit files in `${project_dir}/docker-push`
 1. `cd ${project_dir}/docker-push && make IMAGE=${docker_hub_image} all`
 1. `cd ${project_dir}/gce && make init`
 1. `cd ${project_dir}/gce && make upload_all`
@@ -111,6 +112,7 @@ because the VPN connection will be lost.
 
 #### steps to update the server configuration
 
+1. edit `${project_dir}/conf/server.conf`
 1. `cd ${project_dir}/gce && make init`
 1. `cd ${project_dir}/gce && make upload_conf`
 1. `cd ${project_dir}/gce && make docker-restart`

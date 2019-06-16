@@ -16,7 +16,7 @@ iptables --check POSTROUTING \
     --out-interface eth0 \
     --jump MASQUERADE
 
-if [ ! $? ]; then
+if [ $? -ne 0 ]; then
     # this must be done at the run time because
     #`docker image build` does not accept `--cap-add`
     # and causes a privilege error
