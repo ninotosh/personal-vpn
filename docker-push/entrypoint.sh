@@ -7,8 +7,8 @@ set -u
 if [ ! -e /dev/net/tun ]; then
     mkdir /dev/net
     mknod /dev/net/tun c 10 200
-    chmod 660 /dev/net/tun
 fi
+chmod 660 /dev/net/tun
 
 iptables --check POSTROUTING \
     --table nat \
