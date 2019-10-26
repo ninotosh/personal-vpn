@@ -4,7 +4,8 @@ remote=${1:?"Run $0 server_to_connect_to"}
 
 source ./vars.sh
 
-ovpn_dir="`mktemp -d ${tmp_dir}/ovpn`"
+[ -d "${tmp_dir}/ovpn" ] || mktemp -d "${tmp_dir}/ovpn"
+ovpn_dir="${tmp_dir}/ovpn"
 
 client_template_conf="${self_dir}/../conf/client-template.conf"
 
